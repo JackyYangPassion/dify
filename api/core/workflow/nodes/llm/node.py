@@ -259,8 +259,8 @@ class LLMNode(BaseNode):
             )
 
             # 输出日志：调用模型前的参数以及 模型返回的内容
-            logger.info(f"调用模型前的参数: {prompt_messages}")
-            logger.info(f"调用模型后的参数: {generator}")
+            logger.info("调用模型前的参数: %s", prompt_messages)
+            logger.info("调用模型后的参数: %s", generator)
 
 
 
@@ -291,7 +291,7 @@ class LLMNode(BaseNode):
             }
 
             outputs = {"text": result_text, "usage": jsonable_encoder(usage), "finish_reason": finish_reason}
-            logger.info(f"模型返回的内容: {outputs}")
+            logger.info("模型返回的内容: %s", outputs)
 
             
             if structured_output:
