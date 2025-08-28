@@ -150,7 +150,6 @@ class WorkflowRunApi(Resource):
             raise NotWorkflowAppError()
 
         args = workflow_run_parser.parse_args()
-        logger.info(f"args: {args}")
 
         external_trace_id = get_external_trace_id(request)
         if external_trace_id:
