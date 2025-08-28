@@ -146,6 +146,8 @@ class WorkflowRunApi(Resource):
 
         payload = WorkflowRunPayload.model_validate(service_api_ns.payload or {})
         args = payload.model_dump(exclude_none=True)
+        logger.info(f"args: {args}")
+
         external_trace_id = get_external_trace_id(request)
         if external_trace_id:
             args["external_trace_id"] = external_trace_id
