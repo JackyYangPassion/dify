@@ -258,6 +258,12 @@ class LLMNode(BaseNode):
                 node_id=self.node_id,
             )
 
+            # 输出日志：调用模型前的参数以及 模型返回的内容
+            logger.info(f"调用模型前的参数: {prompt_messages}")
+            logger.info(f"调用模型后的参数: {generator}")
+
+
+
             structured_output: LLMStructuredOutput | None = None
 
             for event in generator:
@@ -285,6 +291,9 @@ class LLMNode(BaseNode):
             }
 
             outputs = {"text": result_text, "usage": jsonable_encoder(usage), "finish_reason": finish_reason}
+            logger.info(f"模型返回的内容: {outputs}")
+
+            
             if structured_output:
                 outputs["structured_output"] = structured_output.structured_output
             if self._file_outputs is not None:

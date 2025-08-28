@@ -536,12 +536,12 @@ class LBModelManager:
             if dify_config.DEBUG:
                 logger.info(
                     """Model LB
-id: %s
-name:%s
-tenant_id: %s
-provider: %s
-model_type: %s
-model: %s""",
+                    id: %s
+                    name: %s
+                    tenant_id: %s
+                    provider: %s
+                    model_type: %s
+                    model: %s""",
                     config.id,
                     config.name,
                     self._tenant_id,
