@@ -30,43 +30,89 @@ api/
 
 ## 2. 后端支持的API接口
 
-### 2.1 API架构设计
+### 2.1 Swagger API 文档访问方式
+
+#### 2.1.1 后端服务启动
+Dify 后端服务默认在 **端口 5001** 运行。启动方式：
+
+**开发模式：**
+```bash
+cd api
+uv run flask run --host 0.0.0.0 --port=5001 --debug
+```
+
+**生产模式（Docker）：**
+```bash
+# 服务会在端口 5001 启动
+docker-compose up
+```
+
+#### 2.1.2 Swagger API 文档访问地址
+
+Dify 为不同的 API 模块提供了独立的 Swagger 文档：
+
+**Service API（应用服务 API）**
+- **访问地址**：`http://localhost:5001/v1/docs`
+- **API 前缀**：`/v1`
+- **描述**：用于应用服务的 API，包括聊天、工作流、数据集等功能
+
+**Files API（文件服务 API）**
+- **访问地址**：`http://localhost:5001/files/docs`
+- **API 前缀**：`/files`
+- **描述**：用于文件操作的 API，包括上传和预览功能
+
+**MCP API（模型上下文协议 API）**
+- **访问地址**：`http://localhost:5001/mcp/docs`
+- **API 前缀**：`/mcp`
+- **描述**：用于模型上下文协议操作的 API
+
+#### 2.1.3 访问说明
+- Swagger 文档页面 (`/docs`) 和 API 规范文件 (`/swagger.json`) 无需身份验证即可访问
+- 实际的 API 调用需要相应的认证（Bearer Token 或 API Key）
+- 认证逻辑会自动跳过文档相关的端点
+
+#### 2.1.4 使用建议
+1. **开发调试**：优先使用 Service API (`/v1/docs`)，这是最完整的 API 文档
+2. **文件操作**：使用 Files API (`/files/docs`) 了解文件上传和处理功能
+3. **MCP 功能**：如需要模型上下文协议相关功能，参考 MCP API (`/mcp/docs`)
+
+### 2.2 API架构设计
 
 Dify后端采用分层API架构，主要包含以下API类型：
 
-#### 2.1.1 Service API (`/v1/*`)
+#### 2.2.1 Service API (`/v1/*`)
 - **目标用户**: 第三方开发者和应用集成
 - **认证方式**: API Token
 - **功能**: 应用运行时API，支持工作流执行、对话等
 
-#### 2.1.2 Console API (`/console/api/*`)  
+#### 2.2.2 Console API (`/console/api/*`)  
 - **目标用户**: Dify控制台用户
 - **认证方式**: Session + JWT
 - **功能**: 应用管理、工作流编辑、数据集管理等
 
-#### 2.1.3 Web API (`/api/*`)
+#### 2.2.3 Web API (`/api/*`)
 - **目标用户**: 发布的Web应用用户
 - **认证方式**: 无需认证或App Token
 - **功能**: 公开的应用交互接口
 
-#### 2.1.4 Files API (`/files/*`)
+#### 2.2.4 Files API (`/files/*`)
 - **目标用户**: 文件上传和处理
 - **认证方式**: 基于上下文的认证
 - **功能**: 文件上传、预览、工具文件管理
 
-#### 2.1.5 MCP API (`/mcp/*`)
+#### 2.2.5 MCP API (`/mcp/*`)
 - **目标用户**: Model Context Protocol操作
 - **认证方式**: 专用认证
 - **功能**: 模型上下文协议相关操作
 
-#### 2.1.6 Inner API (内部API)
+#### 2.2.6 Inner API (内部API)
 - **目标用户**: 内部服务间调用
 - **认证方式**: 内部认证
 - **功能**: 插件管理、工作空间内部操作
 
-### 2.2 主要API接口列表
+### 2.3 主要API接口列表
 
-#### 2.2.1 Service API (`/v1/`)
+#### 2.3.1 Service API (`/v1/`)
 
 | 分类 | 接口路径 | 方法 | 功能描述 |
 |------|----------|------|----------|
@@ -92,7 +138,7 @@ Dify后端采用分层API架构，主要包含以下API类型：
 | **音频** | `/v1/audio-to-text` | POST | 语音转文字 |
 | | `/v1/text-to-audio` | POST | 文字转语音 |
 
-#### 2.2.2 Console API (`/console/api/`)
+#### 2.3.2 Console API (`/console/api/`)
 
 | 分类 | 接口路径 | 方法 | 功能描述 |
 |------|----------|------|----------|
@@ -113,7 +159,7 @@ Dify后端采用分层API架构，主要包含以下API类型：
 | | `/console/api/workspaces/members` | GET/POST | 成员管理 |
 | | `/console/api/model-providers` | GET/POST | 模型提供商 |
 
-#### 2.2.3 Web API (`/api/`)
+#### 2.3.3 Web API (`/api/`)
 
 | 分类 | 接口路径 | 方法 | 功能描述 |
 |------|----------|------|----------|
