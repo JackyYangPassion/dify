@@ -91,7 +91,8 @@ class FunctionCallAgentRunner(BaseAgentRunner):
             # 日志3: 调用模型前的参数
             logging.info("=== Model Invocation - Iteration %d ===", iteration_step)
             logging.info("Prompt Messages Count: %d", len(prompt_messages))
-            logging.info("Available Tools: %s", [tool.name for tool in prompt_messages_tools] if prompt_messages_tools else [])
+            logging.info("Available Tools: %s", [tool.name for tool in prompt_messages_tools] 
+                          if prompt_messages_tools else [])
             logging.info("Model Parameters: %s", app_generate_entity.model_conf.parameters)
             logging.info("Stop Words: %s", app_generate_entity.model_conf.stop)
             logging.info("Stream Mode: %s", self.stream_tool_call)
