@@ -195,6 +195,7 @@ docker/nginx/ssl/*
 !docker/nginx/ssl/.gitkeep
 docker/middleware.env
 docker/docker-compose.override.yaml
+docker/volumes/plugin_daemon/cwd
 
 sdks/python-client/build
 sdks/python-client/dist
