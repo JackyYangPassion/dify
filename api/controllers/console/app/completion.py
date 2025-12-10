@@ -114,6 +114,21 @@ class ChatMessageApi(Resource):
         parser.add_argument("retriever_from", type=str, required=False, default="dev", location="json")
         args = parser.parse_args()
 
+        # 日志1: web传递到后端的参数
+        logging.info("=== GraphAgent Chat Request ===")
+        logging.info("App ID: %s", app_model.id)
+        logging.info("App Mode: %s", app_model.mode)
+        logging.info("Request Args: %s", {
+            "inputs": args.get("inputs"),
+            "query": args.get("query"),
+            "files": args.get("files"),
+            "model_config": args.get("model_config"),
+            "conversation_id": args.get("conversation_id"),
+            "parent_message_id": args.get("parent_message_id"),
+            "response_mode": args.get("response_mode"),
+            "retriever_from": args.get("retriever_from")
+        })
+
         streaming = args["response_mode"] != "blocking"
         args["auto_generate_name"] = False
 
