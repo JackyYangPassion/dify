@@ -88,6 +88,16 @@ class FunctionCallAgentRunner(BaseAgentRunner):
             # recalc llm max tokens
             prompt_messages = self._organize_prompt_messages()
             self.recalc_llm_max_tokens(self.model_config, prompt_messages)
+            
+            # 日志3: 调用模型前的参数
+            logging.info("=== Model Invocation - Iteration %d ===", iteration_step)
+            logging.info("Prompt Messages Count: %d", len(prompt_messages))
+            logging.info("Available Tools: %s", [tool.name for tool in prompt_messages_tools] 
+                          if prompt_messages_tools else [])
+            logging.info("Model Parameters: %s", app_generate_entity.model_conf.parameters)
+            logging.info("Stop Words: %s", app_generate_entity.model_conf.stop)
+            logging.info("Stream Mode: %s", self.stream_tool_call)
+            
             # invoke model
             chunks: Union[Generator[LLMResultChunk, None, None], LLMResult] = model_instance.invoke_llm(
                 prompt_messages=prompt_messages,
@@ -224,9 +234,19 @@ class FunctionCallAgentRunner(BaseAgentRunner):
 
             # call tools
             tool_responses = []
+            if tool_calls:
+                logging.info("=== Tool Calls - Iteration %d ===", iteration_step)
+                logging.info("Number of tool calls: %d", len(tool_calls))
+                
             for tool_call_id, tool_call_name, tool_call_args in tool_calls:
+                # 日志4: 工具调用参数
+                logging.info("Tool Call ID: %s", tool_call_id)
+                logging.info("Tool Name: %s", tool_call_name)
+                logging.info("Tool Arguments: %s", tool_call_args)
+                
                 tool_instance = tool_instances.get(tool_call_name)
                 if not tool_instance:
+                    logging.warning("Tool not found: %s", tool_call_name)
                     tool_response = {
                         "tool_call_id": tool_call_id,
                         "tool_call_name": tool_call_name,
@@ -235,6 +255,7 @@ class FunctionCallAgentRunner(BaseAgentRunner):
                     }
                 else:
                     # invoke tool
+                    logging.info("Invoking tool: %s with parameters: %s", tool_call_name, tool_call_args)
                     tool_invoke_response, message_files, tool_invoke_meta = ToolEngine.agent_invoke(
                         tool=tool_instance,
                         tool_parameters=tool_call_args,
@@ -248,6 +269,9 @@ class FunctionCallAgentRunner(BaseAgentRunner):
                         message_id=self.message.id,
                         conversation_id=self.conversation.id,
                     )
+                    # 日志5: 工具调用结果
+                    logging.info("Tool Response: %s", tool_invoke_response)
+                    logging.info("Tool Meta: %s", tool_invoke_meta.to_dict() if tool_invoke_meta else None)
                     # publish files
                     for message_file_id in message_files:
                         # publish message file

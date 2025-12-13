@@ -250,6 +250,12 @@ class LLMNode(Node[LLMNodeData]):
                 reasoning_format=self.node_data.reasoning_format,
             )
 
+            # 输出日志：调用模型前的参数以及 模型返回的内容
+            logger.info("调用模型前的参数: %s", prompt_messages)
+            logger.info("调用模型后的参数: %s", generator)
+
+
+
             structured_output: LLMStructuredOutput | None = None
 
             for event in generator:
@@ -300,6 +306,7 @@ class LLMNode(Node[LLMNodeData]):
                 "usage": jsonable_encoder(usage),
                 "finish_reason": finish_reason,
             }
+            logger.info("模型返回的内容: %s", outputs)
             if structured_output:
                 outputs["structured_output"] = structured_output.structured_output
             if self._file_outputs:

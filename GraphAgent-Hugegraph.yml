@@ -1,0 +1,144 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: agent-chat
+  name: GraphAgent-Hugegraph
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/openai:0.2.6@e2665624a156f52160927bceac9e169bd7e5ae6b936ae82575e14c90af390e6e
+- current_identifier: null
+  type: package
+  value:
+    plugin_unique_identifier: yangjiaqi/hugegraph_query:0.0.1@e0bd4a23a14960a71c940eb00a0e7be76c17463b89ebad15c06a320d65f13508
+kind: app
+model_config:
+  agent_mode:
+    enabled: true
+    max_iteration: 10
+    prompt: null
+    strategy: react
+    tools:
+    - enabled: true
+      isDeleted: false
+      notAuthor: false
+      provider_id: yangjiaqi/hugegraph_query/hugegraph_query
+      provider_name: yangjiaqi/hugegraph_query/hugegraph_query
+      provider_type: builtin
+      tool_label: HugeGraph基础查询
+      tool_name: hugegraph_query
+      tool_parameters:
+        edge_label: null
+        element_id: null
+        limit: 10
+        operation: get_schema
+        vertex_label: null
+    - enabled: true
+      isDeleted: false
+      notAuthor: false
+      provider_id: yangjiaqi/hugegraph_query/hugegraph_query
+      provider_name: yangjiaqi/hugegraph_query/hugegraph_query
+      provider_type: builtin
+      tool_label: HugeGraph Gremlin查询
+      tool_name: hugegraph_gremlin
+      tool_parameters:
+        gremlin_query: ''
+        limit: ''
+  annotation_reply:
+    enabled: false
+  chat_prompt_config: {}
+  completion_prompt_config: {}
+  dataset_configs:
+    datasets:
+      datasets: []
+    reranking_enable: false
+    retrieval_model: multiple
+    top_k: 4
+  dataset_query_variable: ''
+  external_data_tools: []
+  file_upload:
+    allowed_file_extensions:
+    - .JPG
+    - .JPEG
+    - .PNG
+    - .GIF
+    - .WEBP
+    - .SVG
+    - .MP4
+    - .MOV
+    - .MPEG
+    - .WEBM
+    allowed_file_types: []
+    allowed_file_upload_methods:
+    - local_file
+    - remote_url
+    enabled: false
+    image:
+      detail: high
+      enabled: false
+      number_limits: 3
+      transfer_methods:
+      - local_file
+      - remote_url
+    number_limits: 3
+  model:
+    completion_params:
+      stop: []
+    mode: chat
+    name: gpt-5-chat-latest
+    provider: langgenius/openai/openai
+  more_like_this:
+    enabled: false
+  opening_statement: "欢迎！\U0001F60A 我是一位专业又友好的图谱专家，专门帮助你处理与图数据库相关的问题，并能为你生成和执行查询。无论你是想探索实体之间的关系、查找某类节点，还是分析知识图谱中的复杂结构，我都能用\
+    \ HugeGraph 的查询语言为你找到答案。你只需要提出问题，我会先为你构造清晰的 Gremlin 查询语句，然后再用简洁或详细的自然语言为你解释结果。\
+    \  \n\n换句话说——你负责提问，我负责为你把图谱世界的奥秘讲解清楚！✨  "
+  pre_prompt: "```xml\n<instruction>\n你是一个图专家，负责处理用户关于图谱的问题以及执行图查询任务。  \n请严格按照以下步骤完成任务：\
+    \  \n1. 阅读用户问题 {{user_question}}，理解其查询意图。  \n2. 如果用户提供了额外的上下文信息 {{user_context}}，结合上下文来优化查询。\
+    \  \n3. 根据意图构造合适的 Gremlin 查询语句，用于在 HugeGraph 数据库中执行。  \n4. 使用工具 hugegraph_query\
+    \ 调用构造的查询，调用格式为：hugegraph_query(\"这里填入Gremlin语句\")。  \n5. 在输出部分，先给出清晰的查询语句，再根据查询结果生成简洁的自然语言回答\
+    \ {{answer_style}}。  \n6. 输出中不要包含任何 xml 标签。  \n</instruction>\n\n<input>  \n用户问题:\
+    \ {{user_question}}  \n上下文信息: {{user_context}}  \n回答风格: {{answer_style}} （例如：简洁说明\
+    \ / 详细解释 / 可视化描述）  \n</input>\n\n<example>  \n用户问题: \"请分析下用户 user_4 2跳关系子图\" \
+    \ \n上下文信息: \"用户之前询问了关于科幻电影的相关知识\"  \n回答风格: \"简洁说明\"  \n\n生成 Gremlin 查询:  \nhugegraph_query(\"\
+    g.V('user_4').repeat(both().simplePath()).times(2).valueMap(true).limit(50)\"\
+    )  \n\n回答示例:  \n\"两跳子图中关联了5个用户，2个司机。\"  \n</example>\n\n<output>  \n1. Gremlin\
+    \ 查询语句  \n2. 基于查询结果的自然语言回答  \n</output>\n```"
+  prompt_type: simple
+  retriever_resource:
+    enabled: true
+  sensitive_word_avoidance:
+    configs: []
+    enabled: false
+    type: ''
+  speech_to_text:
+    enabled: false
+  suggested_questions: []
+  suggested_questions_after_answer:
+    enabled: false
+  text_to_speech:
+    enabled: false
+    language: ''
+    voice: ''
+  user_input_form:
+  - text-input:
+      default: ''
+      label: user_question
+      max_length: 48
+      required: false
+      variable: user_question
+  - text-input:
+      default: ''
+      label: user_context
+      max_length: 48
+      required: false
+      variable: user_context
+  - text-input:
+      default: ''
+      label: answer_style
+      max_length: 48
+      required: false
+      variable: answer_style
+version: 0.3.1

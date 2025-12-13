@@ -209,6 +209,15 @@ class AgentChatAppRunner(AppRunner):
         else:
             raise ValueError(f"Invalid agent strategy: {agent_entity.strategy}")
 
+        # 日志2: Agent配置和模型参数
+        logging.info("=== Agent Configuration ===")
+        logging.info("Agent Strategy: %s", agent_entity.strategy)
+        logging.info("Agent Max Iteration: %s", agent_entity.max_iteration)
+        logging.info("Agent Tools: %s", [tool.tool_name for tool in agent_entity.tools] if agent_entity.tools else [])
+        logging.info("Model Provider: %s", model_instance.provider)
+        logging.info("Model Name: %s", model_instance.model)
+        logging.info("Model Parameters: %s", application_generate_entity.model_conf.parameters)
+
         runner = runner_cls(
             tenant_id=app_config.tenant_id,
             application_generate_entity=application_generate_entity,
